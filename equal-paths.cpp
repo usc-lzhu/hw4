@@ -9,14 +9,19 @@ using namespace std;
 
 // You may add any prototypes of helper functions here
 int equalPathsHelper(Node * node) {
-    // base clase: traversed past leaf node
+    // base clase: traversed to leaf node
     if (node == nullptr) {
         return 0;
     }
 
-    if (equalPathsHelper(node -> left) == equalPathsHelper(node -> right)) {
-        return 1;
+    int leftHeight = equalPathsHelper(node -> left);
+    int rightHeight = equalPathsHelper(node -> right);
+
+    if (leftHeight != -1 && leftHeight == rightHeight) {
+        return leftHeight + 1;
     }
+
+    return -1;
 }
 
 
@@ -24,7 +29,10 @@ bool equalPaths(Node * root)
 {
     // Add your code below
 
-    if (equalPathsHelper(root)) {
+    int leftHeight = equalPathsHelper(root -> left);
+    int rightHeight = equalPathsHelper(root -> right);
+
+    if (leftHeight != -1 && leftHeight == rightHeight) {
         return true;
     }
 
