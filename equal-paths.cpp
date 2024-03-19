@@ -17,8 +17,11 @@ int equalPathsHelper(Node * node) {
     int leftHeight = equalPathsHelper(node -> left);
     int rightHeight = equalPathsHelper(node -> right);
 
-    if (leftHeight != -1 && leftHeight == rightHeight) {
+    if (leftHeight != -1 && leftHeight == rightHeight || rightHeight == 0) {
         return leftHeight + 1;
+    }
+    else if (leftHeight == 0) {
+        return rightHeight + 1;
     }
 
     return -1;
