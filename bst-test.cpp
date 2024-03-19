@@ -1,5 +1,3 @@
-// test if vs code clone worked
-
 #include <iostream>
 #include <map>
 #include "bst.h"
