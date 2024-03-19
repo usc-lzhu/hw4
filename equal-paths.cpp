@@ -35,14 +35,18 @@ bool equalPaths(Node * root)
         return true;
     }
 
+    int leftHeight = equalPathsHelper(root -> left);
+    int rightHeight = equalPathsHelper(root -> right);
+
+    if (leftHeight == -1 || rightHeight == -1) {
+        return false;
+    }
+
     if (root -> left == nullptr || root -> right == nullptr) {
         return true;
     }
 
-    int leftHeight = equalPathsHelper(root -> left);
-    int rightHeight = equalPathsHelper(root -> right);
-
-    if (leftHeight != -1 && leftHeight == rightHeight) {
+    if (leftHeight == rightHeight) {
         return true;
     }
 
