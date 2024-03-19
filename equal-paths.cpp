@@ -32,6 +32,10 @@ bool equalPaths(Node * root)
         return true;
     }
 
+    if (root -> left == nullptr || root -> right == nullptr) {
+        return true;
+    }
+
     int leftHeight = equalPathsHelper(root -> left);
     int rightHeight = equalPathsHelper(root -> right);
 
