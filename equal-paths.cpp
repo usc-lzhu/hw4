@@ -1,6 +1,6 @@
 #ifndef RECCHECK
 //if you want to add any #includes like <iostream> you must do them here (before the next endif)
-
+#include <iostream>
 #endif
 
 #include "equal-paths.h"
@@ -17,7 +17,7 @@ bool equalPathsHelper(Node* node, int currHeight, int* leafHeight) {
     // second base case: traversed to leaf node
     if (node -> left == nullptr && node -> right == nullptr) {
         // set leafHeight to first traversed leaf's height
-        if (leafHeight == nullptr) {
+        if (*leafHeight == -1) {
             *leafHeight = currHeight;
             return true;
         }
@@ -39,6 +39,8 @@ bool equalPathsHelper(Node* node, int currHeight, int* leafHeight) {
 bool equalPaths(Node * root)
 {
     // Add your code below
-    return equalPathsHelper(root, 0, nullptr);    
+    int temp = -1;
+    return equalPathsHelper(root, 0, &temp);  
+  
 }
 
