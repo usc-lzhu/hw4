@@ -8,49 +8,37 @@ using namespace std;
 
 
 // You may add any prototypes of helper functions here
-int equalPathsHelper(Node * node) {
-    // base clase: traversed to leaf node
+bool equalPathsHelper(Node* node, int currHeight, int* leafHeight) {
+    // first base case: traversed past nodes
     if (node == nullptr) {
-        return 0;
+        return true;
     }
 
-    int leftHeight = equalPathsHelper(node -> left);
-    int rightHeight = equalPathsHelper(node -> right);
+    // second base case: traversed to leaf node
+    if (node -> left == nullptr && node -> right == nullptr) {
+        // set leafHeight to first traversed leaf's height
+        if (leafHeight == nullptr) {
+            *leafHeight = currHeight;
+            return true;
+        }
+        
+        // return true if current leaf's height matches first leaf's height
+        if (currHeight == *leafHeight) {
+            return true;
+        }
 
-    if (leftHeight != -1 && leftHeight == rightHeight || rightHeight == 0) {
-        return leftHeight + 1;
-    }
-    else if (leftHeight == 0) {
-        return rightHeight + 1;
+        // return false if leaf heights dont match
+        return false;
     }
 
-    return -1;
+    // recursive case: traverse to left and/or right child node
+    return equalPathsHelper(node -> left, currHeight + 1, leafHeight) && equalPathsHelper(node -> right, currHeight + 1, leafHeight);
 }
 
 
 bool equalPaths(Node * root)
 {
     // Add your code below
-    if (root == nullptr) {
-        return true;
-    }
-
-    int leftHeight = equalPathsHelper(root -> left);
-    int rightHeight = equalPathsHelper(root -> right);
-
-    if (leftHeight == -1 || rightHeight == -1) {
-        return false;
-    }
-
-    if (root -> left == nullptr || root -> right == nullptr) {
-        return true;
-    }
-
-    if (leftHeight == rightHeight) {
-        return true;
-    }
-
-    return false;
-    
+    return equalPathsHelper(root, 0, nullptr);    
 }
 
