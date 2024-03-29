@@ -486,44 +486,61 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
     const Value& value = keyValuePair.second;
     Node<Key, Value>* curr = root_;
     bool foundPos = false;
+
+		printRoot(root_);
+		std::cout << "\ninserting " << key << std::endl;
     
     // insert into empty tree
     if (empty()) {
-        root_ = new Node<Key, Value>(key, value, curr);
-        std::cout << "root after insert: " << root_ -> getKey() << std::endl;
+        root_ = new Node<Key, Value>(key, value, NULL);
+        // std::cout << "root after insert: " << root_ -> getKey() << std::endl;
+				std::cout << "inserted " << root_ -> getKey() << std::endl;
         return;
     }
 
     // traverse through tree until leaf node
     while (!foundPos) {
+				std::cout << "current: " << curr -> getKey() << std::endl; 
+
         // update value if key already exists
-        if (curr -> getKey() == key) {
+        if (key == curr -> getKey()) {
+						std::cout << "here 0" << std::endl; 
             curr -> setValue(value);
+						std::cout << "inserted " << curr -> getKey() << std::endl;
             foundPos = true;
         }
         // traverse left if key is less than current node
-        else if (curr -> getKey() > key) {
+        else if (key < curr -> getKey()) {
+						std::cout << "here 1" << std::endl; 
+
             if (curr -> getLeft() != NULL) {
                 curr = curr -> getLeft();
+								std::cout << "traverse left" << std::endl; 
             }
             else {
                 foundPos = true;
                 curr -> setLeft(new Node<Key, Value>(key, value, curr));
+								std::cout << "inserted " << curr -> getLeft() -> getKey() << std::endl;
             }
         }
         // traverse right if key is greater than current node
         else {
+						std::cout << "here 2" << std::endl; 
+						
             if (curr -> getRight() != NULL) {
                 curr = curr -> getRight();
+								std::cout << "traverse right" << std::endl; 
             }
             else {
                 foundPos = true;
                 curr -> setRight(new Node<Key, Value>(key, value, curr));
+								std::cout << "inserted " << curr -> getRight() -> getKey() << std::endl;
             }
+
         }
     }
 
-    std::cout << "root after insert: " << root_ -> getKey() << std::endl;
+    // std::cout << "root after insert: " << root_ -> getKey() << std::endl;
 
 }
 
