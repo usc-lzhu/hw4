@@ -137,7 +137,7 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
-
+    void insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Value>* node, bool isLeftChild);
 
 };
 
@@ -149,7 +149,68 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
+
+    const Key& key = new_item.first;
+    const Value& value = new_item.second;
+    Node<Key, Value>* curr = root_;
+
+    // insert into empty tree
+    if (empty()) {
+        root_ = new Node<Key, Value>(key, value, NULL);
+		// std::cout << "inserted " << root_ -> getKey() << std::endl;
+        return;
+    }
+
+    // traverse through tree until leaf node
+    while (curr != NULL) {
+		// std::cout << "current: " << curr -> getKey() << std::endl; 
+
+        // update value if key already exists
+        if (key == curr -> getKey()) {
+            curr -> setValue(value);
+            break;
+        }
+        // traverse left if key is less than current node
+        else if (key < curr -> getKey()) {
+            if (curr -> getLeft() != NULL) {
+                curr = curr -> getLeft();
+            }
+            else {
+                curr -> setLeft(new Node<Key, Value>(key, value, curr));
+                insertFix(curr, curr -> getLeft(), true);
+                break;
+            }
+        }
+        // traverse right if key is greater than current node
+        else {
+            if (curr -> getRight() != NULL) {
+                curr = curr -> getRight();
+            }
+            else {
+                curr -> setRight(new Node<Key, Value>(key, value, curr));
+                insertFix(curr, curr -> getRight(), false);
+                break;
+            }
+        }
+    }
 }
+
+template<class Key, class Value>
+void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Value>* node, bool isLeftChild) {
+    if (parent == NULL || parent -> getParent() == NULL) {
+        return;
+    }
+
+    Node<Key, Value>* grandparent = parent -> getParent();
+
+    if (isLeftChild) {
+
+    }
+    else {
+        
+    }
+}
+
 
 /*
  * Recall: The writeup specifies that if a node has 2 children you

@@ -155,6 +155,7 @@ TEST(BSTInsert, BasicRandom)
 
 }
 
+
 TEST(BSTInsert, Random50x30ele)
 {
 	const RandomSeed masterSeed = 343;
@@ -197,6 +198,6 @@ TEST(BSTInsert, Random3x5000ele)
 
 		testTree.clear();
 	}
-
+	
 
 }

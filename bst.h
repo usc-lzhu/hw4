@@ -493,42 +493,28 @@ template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
     // TODO
-		std::cout << "\n\nstart insert function -------------------------------------------------------------" << std::endl;
+    // std::cout << "\n\nstart insert function -------------------------------------------------------------" << std::endl;
 
-		std::cout << keyValuePair.first << " " << keyValuePair.second << std::endl;
+    // std::cout << "key: " << keyValuePair.first << " value: " << keyValuePair.second << std::endl;
 
-		std::cout << "1" << std::endl;
-		if (!empty()) {
-			std::cout << "~~" << std::endl;
-			std::cout << root_ -> getKey() << std::endl;
-			std::cout << "~~" << std::endl;
-			// root_ -> setRight(new Node<Key, Value>(keyValuePair.first, keyValuePair.second, root_));
-			root_ -> getRight();
-			std::cout << "~~" << std::endl;
-			root_ -> getLeft();
-			std::cout << "~~" << std::endl;
-		} 
+    // std::cout << "\nprint root at start:" << std::endl;
+    // if (!empty()) {
+    //     std::cout << "key" << std::endl;
+    //     std::cout << root_ -> getKey() << std::endl;
+    //     std::cout << "value" << std::endl;
+    //     std::cout << root_ -> getValue() << std::endl;
+    //     std::cout << "parent" << std::endl;
+    //     std::cout << root_ -> getParent() << std::endl;
+    //     std::cout << "right" << std::endl;
+    //     std::cout << root_ -> getRight() << std::endl;
+    //     std::cout << "left" << std::endl;
+    //     std::cout << root_ -> getLeft() << std::endl;
+    //     std::cout << "----" << std::endl;
+    // } 
 
     const Key& key = keyValuePair.first;
     const Value& value = keyValuePair.second;
     Node<Key, Value>* curr = root_;
-    bool foundPos = false;
-
-		std::cout << "2" << std::endl;
-		if (!empty()) {
-			std::cout << "~~" << std::endl;
-			root_ -> getRight();
-			std::cout << "~~" << std::endl;
-			root_ -> getLeft();
-			std::cout << "~~" << std::endl;
-		} 
-
-
-		// std::cout << "here jfdkla" << std::endl;
-		print();
-		// std::cout << "here jfdlaj" << std::endl;
-
-		std::cout << "\n\tinserting " << key << std::endl;
     
     // insert into empty tree
     if (empty()) {
@@ -538,67 +524,65 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         return;
     }
 
-		std::cout << "3" << std::endl;
-		if (!empty()) {
-			std::cout << "~~" << std::endl;
-			root_ -> getRight();
-			std::cout << "~~" << std::endl;
-			root_ -> getLeft();
-			std::cout << "~~" << std::endl;
-		} 
-
-
     // traverse through tree until leaf node
-    while (!foundPos) {
-				std::cout << "current: " << curr -> getKey() << std::endl; 
-
+    while (curr != NULL) {
         // update value if key already exists
         if (key == curr -> getKey()) {
-						std::cout << "here 0" << std::endl; 
+            // std::cout << "key =" << std::endl; 
             curr -> setValue(value);
-						std::cout << "updated " << curr -> getKey() << std::endl;
-            foundPos = true;
+            // std::cout << "updated " << curr -> getKey() << std::endl;
+            break;
         }
         // traverse left if key is less than current node
         else if (key < curr -> getKey()) {
-						std::cout << "here 1" << std::endl; 
+            // std::cout << "key <" << std::endl; 
 
             if (curr -> getLeft() != NULL) {
                 curr = curr -> getLeft();
-								std::cout << "traversed left" << std::endl; 
+                // std::cout << "traversed left" << std::endl; 
             }
             else {
-                foundPos = true;
                 curr -> setLeft(new Node<Key, Value>(key, value, curr));
-								std::cout << "inserted " << curr -> getLeft() -> getKey() << std::endl;
-								std::cout << "parent " << curr -> getKey() << std::endl;
+                // std::cout << "inserted " << curr -> getLeft() -> getKey() << std::endl;
+                // std::cout << "parent " << curr -> getKey() << std::endl;
+                break;
             }
         }
         // traverse right if key is greater than current node
         else {
-						std::cout << "here 2" << std::endl; 
+			// std::cout << "key >" << std::endl; 
 
             if (curr -> getRight() != NULL) {
                 curr = curr -> getRight();
-								std::cout << "traversed right" << std::endl; 
+                // std::cout << "traversed right" << std::endl; 
             }
             else {
-                foundPos = true;
                 curr -> setRight(new Node<Key, Value>(key, value, curr));
-								std::cout << "inserted " << curr -> getRight() -> getKey() << std::endl;
+                // std::cout << "inserted " << curr -> getRight() -> getKey() << std::endl;
+                break;
             }
 
         }
     }
 
-		std::cout << "4" << std::endl;
-		if (!empty()) {
-			std::cout << "~~" << std::endl;
-			root_ -> getRight();
-			std::cout << "~~" << std::endl;
-			root_ -> getLeft();
-			std::cout << "~~" << std::endl;
-		} 
+    // print();
+
+
+    // std::cout << "print root at end: " << std::endl;
+    // if (!empty()) {
+    //     std::cout << "key" << std::endl;
+    //     std::cout << root_ -> getKey() << std::endl;
+    //     std::cout << "value" << std::endl;
+    //     std::cout << root_ -> getValue() << std::endl;
+    //     std::cout << "parent" << std::endl;
+    //     std::cout << root_ -> getParent() << std::endl;
+    //     std::cout << "right" << std::endl;
+    //     std::cout << root_ -> getRight() << std::endl;
+    //     std::cout << "left" << std::endl;
+    //     std::cout << root_ -> getLeft() << std::endl;
+    //     std::cout << "----" << std::endl;
+
+    // } 
 }
 
 
@@ -614,6 +598,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 
     std::cout << "\nstart remove -----------------------------------------" << std::endl;
 
+    print();
     
     Node<Key, Value>* curr = internalFind(key);
 
@@ -640,18 +625,16 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
     Node<Key, Value>* parent = curr -> getParent();
     Node<Key, Value>* child = NULL;
 
-    std::cout << "parent: " << parent -> getKey() << std::endl;
-
 
     std::cout << "here 2" << std::endl;
 
     // sets child to left or right node if they exists
     if (curr -> getLeft() != NULL) {
-        std::cout << "setting left child to null" << std::endl;
+        std::cout << "set left child" << std::endl;
         child = curr -> getLeft();
     }
     else if (curr -> getRight() != NULL) {
-        std::cout << "setting right child to null" << std::endl;
+        std::cout << "set right child" << std::endl;
         child = curr -> getRight();
     }
 
@@ -659,7 +642,7 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 
     // update child's parent pointer if current node is not a leaf node
     if (child != NULL) {
-        std::cout << "update parent pointer" << std::endl;
+        std::cout << "update child's parent pointer" << std::endl;
         child -> setParent(parent);
     }
 
@@ -667,7 +650,15 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 
     // update parent's left or right child pointer to current node's child 
     // pointer or NULL if current node is a leaf node
-    if ((parent -> getLeft() != NULL) && (parent -> getLeft() -> getKey() == curr -> getKey())) {
+    if (parent == NULL) {
+        if (child == NULL) {
+            root_ = NULL;
+        } 
+        else {
+            root_ = child;
+        }
+    }
+    else if ((parent -> getLeft() != NULL) && (parent -> getLeft() -> getKey() == curr -> getKey())) {
         std::cout << "update parent's left child" << std::endl;
         parent -> setLeft(child);
     }
@@ -683,7 +674,8 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
 
     std::cout << "here 6" << std::endl;
 
-    
+    print();
+
     std::cout << "end remove -------------------------------------------\n" << std::endl;
 
 
@@ -823,17 +815,7 @@ void BinarySearchTree<Key, Value>::clear()
     // TODO
 
     clearHelper(root_);
-
-    // iterator it = begin();
-    // std::pair<const Key,Value>* curr = NULL;
-
-    // while (it != end()) {
-    //     *curr = *it;
-    //     ++it;
-    //     delete curr;
-    // }
-
-    // root_ = NULL;
+    root_ = NULL;
 }
 
 template<typename Key, typename Value>
