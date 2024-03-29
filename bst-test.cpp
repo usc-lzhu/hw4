@@ -12,11 +12,27 @@ int main(int argc, char *argv[])
     BinarySearchTree<char,int> bt;
     bt.insert(std::make_pair('a',1));
     bt.insert(std::make_pair('b',2));
+
+    BinarySearchTree<char,int>::iterator itTest = bt.begin();
+    cout << itTest -> first << endl;
+    ++itTest;
+    cout << itTest -> first << endl;
+    ++itTest;
+
+    if (itTest == bt.end()) {
+        cout << "reached end()" << endl;
+    }
+
+    cout << "\n\nmain here" << endl;
+
     
-    cout << "Binary Search Tree contents:" << endl;
+    cout << "\nStart Binary Search Tree contents: ------------------------------------------------" << endl;
     for(BinarySearchTree<char,int>::iterator it = bt.begin(); it != bt.end(); ++it) {
         cout << it->first << " " << it->second << endl;
     }
+    cout << "End Binary Search Tree contents: --------------------------------------------------\n" << endl;
+
+
     if(bt.find('b') != bt.end()) {
         cout << "Found b" << endl;
     }
@@ -25,6 +41,14 @@ int main(int argc, char *argv[])
     }
     cout << "Erasing b" << endl;
     bt.remove('b');
+
+    cout << "\nStart Binary Search Tree contents: ------------------------------------------------" << endl;
+    for(BinarySearchTree<char,int>::iterator it = bt.begin(); it != bt.end(); ++it) {
+        cout << it->first << " " << it->second << endl;
+    }
+    cout << "End Binary Search Tree contents: --------------------------------------------------\n" << endl;
+
+    cout << "\n\n\n" << endl;
 
     // AVL Tree Tests
     AVLTree<char,int> at;
