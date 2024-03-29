@@ -868,6 +868,8 @@ BinarySearchTree<Key, Value>::getSmallestNode() const
         smallestNode = smallestNode -> getLeft();
     }
 
+    std::cout << "root: " << root_ -> getKey() << std::endl;
+
     return smallestNode;
 }
 
