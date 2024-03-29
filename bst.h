@@ -314,7 +314,16 @@ BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
     // TODO
-    return ((current_ == NULL && rhs.current_ == NULL) || (current_ -> getValue() == rhs -> second));
+
+		if (current_ == NULL && rhs.current_ == NULL) {
+        return true;
+    }
+    
+    if ((current_ == NULL && rhs.current_ != NULL) || (current_ != NULL && rhs.current_ == NULL)) {
+        return false;
+    }
+
+    return (current_ -> getValue() == rhs -> second);
 }
 
 /**
@@ -347,18 +356,18 @@ typename BinarySearchTree<Key, Value>::iterator&
 BinarySearchTree<Key, Value>::iterator::operator++()
 {
     // TODO
-    std::cout << "\nstart operator++ function ------------------------------------" << std::endl;
+    // std::cout << "\nstart operator++ function ------------------------------------" << std::endl;
 
-    std::cout << "current before ++: " << current_ -> getKey() << std::endl;
+    // std::cout << "current before ++: " << current_ -> getKey() << std::endl;
 
     current_ = successor(current_);
 
     // std::cout << "current after ++: " << current_ -> getKey() << std::endl;
-    if (current_ == NULL) {
-        std::cout << "NULL" << std::endl;
-    }
+    // if (current_ == NULL) {
+    //     std::cout << "NULL" << std::endl;
+    // }
 
-    std::cout << "end operator++ function --------------------------------------\n" << std::endl;
+    // std::cout << "end operator++ function --------------------------------------\n" << std::endl;
 
 
     return *this;
@@ -443,13 +452,15 @@ typename BinarySearchTree<Key, Value>::iterator
 BinarySearchTree<Key, Value>::find(const Key & k) const
 {
     Node<Key, Value> *curr = internalFind(k);
-    if (curr != NULL) {
-        std::cout << "curr: " << curr -> getKey() << std::endl;
-    }
-    else {
-        std::cout << "not found" << std::endl;
-    }
+    // if (curr != NULL) {
+    //     std::cout << "curr: " << curr -> getKey() << std::endl;
+    // }
+    // else {
+    //     std::cout << "not found" << std::endl;
+    // }
+
     BinarySearchTree<Key, Value>::iterator it(curr);
+		// std::cout << "here" << std::endl;
     return it;
 }
 
@@ -482,13 +493,42 @@ template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
     // TODO
+		std::cout << "\n\nstart insert function -------------------------------------------------------------" << std::endl;
+
+		std::cout << keyValuePair.first << " " << keyValuePair.second << std::endl;
+
+		std::cout << "1" << std::endl;
+		if (!empty()) {
+			std::cout << "~~" << std::endl;
+			std::cout << root_ -> getKey() << std::endl;
+			std::cout << "~~" << std::endl;
+			// root_ -> setRight(new Node<Key, Value>(keyValuePair.first, keyValuePair.second, root_));
+			root_ -> getRight();
+			std::cout << "~~" << std::endl;
+			root_ -> getLeft();
+			std::cout << "~~" << std::endl;
+		} 
+
     const Key& key = keyValuePair.first;
     const Value& value = keyValuePair.second;
     Node<Key, Value>* curr = root_;
     bool foundPos = false;
 
-		printRoot(root_);
-		std::cout << "\ninserting " << key << std::endl;
+		std::cout << "2" << std::endl;
+		if (!empty()) {
+			std::cout << "~~" << std::endl;
+			root_ -> getRight();
+			std::cout << "~~" << std::endl;
+			root_ -> getLeft();
+			std::cout << "~~" << std::endl;
+		} 
+
+
+		// std::cout << "here jfdkla" << std::endl;
+		print();
+		// std::cout << "here jfdlaj" << std::endl;
+
+		std::cout << "\n\tinserting " << key << std::endl;
     
     // insert into empty tree
     if (empty()) {
@@ -498,6 +538,16 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         return;
     }
 
+		std::cout << "3" << std::endl;
+		if (!empty()) {
+			std::cout << "~~" << std::endl;
+			root_ -> getRight();
+			std::cout << "~~" << std::endl;
+			root_ -> getLeft();
+			std::cout << "~~" << std::endl;
+		} 
+
+
     // traverse through tree until leaf node
     while (!foundPos) {
 				std::cout << "current: " << curr -> getKey() << std::endl; 
@@ -506,7 +556,7 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         if (key == curr -> getKey()) {
 						std::cout << "here 0" << std::endl; 
             curr -> setValue(value);
-						std::cout << "inserted " << curr -> getKey() << std::endl;
+						std::cout << "updated " << curr -> getKey() << std::endl;
             foundPos = true;
         }
         // traverse left if key is less than current node
@@ -515,21 +565,22 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 
             if (curr -> getLeft() != NULL) {
                 curr = curr -> getLeft();
-								std::cout << "traverse left" << std::endl; 
+								std::cout << "traversed left" << std::endl; 
             }
             else {
                 foundPos = true;
                 curr -> setLeft(new Node<Key, Value>(key, value, curr));
 								std::cout << "inserted " << curr -> getLeft() -> getKey() << std::endl;
+								std::cout << "parent " << curr -> getKey() << std::endl;
             }
         }
         // traverse right if key is greater than current node
         else {
 						std::cout << "here 2" << std::endl; 
-						
+
             if (curr -> getRight() != NULL) {
                 curr = curr -> getRight();
-								std::cout << "traverse right" << std::endl; 
+								std::cout << "traversed right" << std::endl; 
             }
             else {
                 foundPos = true;
@@ -540,8 +591,14 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
         }
     }
 
-    // std::cout << "root after insert: " << root_ -> getKey() << std::endl;
-
+		std::cout << "4" << std::endl;
+		if (!empty()) {
+			std::cout << "~~" << std::endl;
+			root_ -> getRight();
+			std::cout << "~~" << std::endl;
+			root_ -> getLeft();
+			std::cout << "~~" << std::endl;
+		} 
 }
 
 
@@ -712,17 +769,17 @@ template<class Key, class Value>
 Node<Key, Value>*
 BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
 {
-    std::cout << "start successor method ----------------------" << std::endl;
-    std::cout << "current: " << current -> getKey() << std::endl;
+    // std::cout << "start successor method ----------------------" << std::endl;
+    // std::cout << "current: " << current -> getKey() << std::endl;
 
     // TODO
     Node<Key, Value>* successor = NULL;
 
-    std::cout << "here 1" << std::endl;
+    // std::cout << "here 1" << std::endl;
 
     // if right child exists, successor is left most node in left subtree
     if (current -> getRight() != NULL) {
-        std::cout << "here 2" << std::endl;
+        // std::cout << "here 2" << std::endl;
         successor = current -> getRight();
         while (successor -> getLeft() != NULL) {
             successor = successor -> getLeft();
@@ -730,7 +787,7 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
     }
     // finds first parent node that has left child ancestor of current node
     else if (current -> getParent() != NULL) {
-        std::cout << "here 3" << std::endl;
+        // std::cout << "here 3" << std::endl;
         Node<Key, Value>* parent = current -> getParent();
         successor = current;
 
@@ -749,7 +806,7 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
         successor = parent;
     }
     
-    std::cout << "end successor method ------------------------" << std::endl;
+    // std::cout << "end successor method ------------------------" << std::endl;
 
 
     return successor;
@@ -822,15 +879,15 @@ BinarySearchTree<Key, Value>::getSmallestNode() const
 template<typename Key, typename Value>
 Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) const
 {
-    std::cout << "\nstart internal find -----------------------------------------" << std::endl;
+    // std::cout << "\nstart internal find -----------------------------------------" << std::endl;
     // TODO
     // traverse through tree starting at the root
     Node<Key, Value>* curr = root_;
 
     while (curr != NULL) {
         if (curr -> getKey() == key) {
-            std::cout << "found curr: " << curr -> getKey() << std::endl;
-            std::cout << "end internal find -------------------------------------------" << std::endl;
+            // std::cout << "found curr: " << curr -> getKey() << std::endl;
+            // std::cout << "end internal find -------------------------------------------" << std::endl;
             return curr;
         }
         else if (key < curr -> getKey()) {
@@ -848,8 +905,8 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
             curr = curr -> getRight();
         }
     }
-    std::cout << "did not find curr :(" << std::endl;
-    std::cout << "end internal find -------------------------------------------\n" << std::endl;
+    // std::cout << "did not find curr :(" << std::endl;
+    // std::cout << "end internal find -------------------------------------------\n" << std::endl;
 
     return NULL;
 }
