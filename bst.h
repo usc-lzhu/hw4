@@ -315,7 +315,7 @@ BinarySearchTree<Key, Value>::iterator::operator==(
 {
     // TODO
 
-		if (current_ == NULL && rhs.current_ == NULL) {
+	if (current_ == NULL && rhs.current_ == NULL) {
         return true;
     }
     
