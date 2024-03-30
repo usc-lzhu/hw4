@@ -152,6 +152,8 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* node) {
     if (node == NULL || node -> getLeft() == NULL) {
         return;
     }
+    // std::cout << "\n\nrotateRight start ---------------------------------------" << std::endl;
+    // this -> print();    
 
     AVLNode<Key, Value>* parent = node -> getParent();
     AVLNode<Key, Value>* child = node -> getLeft();
@@ -168,6 +170,10 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* node) {
             parent -> setRight(child);
         }
     }
+    // update root of tree if parent is null
+    else {
+        this -> root_ = child;
+    }
 
     // update pointers and balances
     child -> setParent(parent);
@@ -179,10 +185,10 @@ void AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* node) {
     if (grandchild != NULL) {
         grandchild -> setParent(node);
     }
-    else {
-        child -> setBalance(child -> getBalance() + 1);
-        node -> setBalance(node -> getBalance() - 1);
-    }
+
+    // this -> print();
+    // std::cout << "rotateRight end -----------------------------------------\n\n" << std::endl;
+
 }
 
 template<class Key, class Value>
@@ -191,7 +197,10 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* node) {
     if (node == NULL || node -> getRight() == NULL) {
         return;
     }
-    
+
+    // std::cout << "\n\nrotateLeft start ---------------------------------------" << std::endl;
+    // this -> print();
+
     AVLNode<Key, Value>* parent = node -> getParent();
     AVLNode<Key, Value>* child = node -> getRight();
     AVLNode<Key, Value>* grandchild = child -> getLeft();
@@ -207,6 +216,10 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* node) {
             parent -> setRight(child);
         }
     }
+    // update root of tree if parent is null
+    else {
+        this -> root_ = child;
+    }
 
     // update pointers and balances
     child -> setParent(parent);
@@ -218,10 +231,9 @@ void AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* node) {
     if (grandchild != NULL) {
         grandchild -> setParent(node);
     }
-    else {
-        child -> setBalance(child -> getBalance() + 1);
-        node -> setBalance(node -> getBalance() - 1);
-    }
+
+    // this -> print();
+    // std::cout << "rotateLeft end -----------------------------------------\n\n" << std::endl;
 }
 
 /*
@@ -281,13 +293,17 @@ void AVLTree<Key, Value>::insert(const std::pair<const Key, Value> &new_item)
 
     // fix balance if parent's initial balance was 0 
     if (curr -> getBalance() == 0) {
-        curr -> setBalance(1);
         if (isLeftChild) {
+            curr -> setBalance(-1);
             insertFix(curr, curr -> getLeft(), true);
         }
         else {
+            curr -> setBalance(1);
             insertFix(curr, curr -> getRight(), false);
         }
+    }
+    else {
+        curr -> setBalance(0);
     }
 
 
@@ -295,6 +311,8 @@ void AVLTree<Key, Value>::insert(const std::pair<const Key, Value> &new_item)
 
 template<class Key, class Value>
 void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Value>* node, bool nIsLeftChild) {
+    std::cout << "fixing " << node -> getKey() << std::endl;
+    
     if (parent == NULL || parent -> getParent() == NULL) {
         return;
     }
@@ -303,15 +321,18 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Va
     bool pIsLeftChild;
     int gBalance;
 
-    if (grandparent -> getLeft() -> getKey() == parent -> getKey()) {
+    if ((grandparent -> getLeft() != NULL) && (grandparent -> getLeft() -> getKey() == parent -> getKey())) {
         pIsLeftChild = true;
     }
     else {
         pIsLeftChild = false;
     }
 
-    // node is a left child
-    if (nIsLeftChild) {
+    std::cout << "child is a left child: " << nIsLeftChild << std::endl;
+    std::cout << "parent is a left child: " << pIsLeftChild << std::endl;
+
+    // parent is a left child
+    if (pIsLeftChild) {
         gBalance = grandparent -> getBalance() - 1;
         grandparent -> setBalance(gBalance);
 
@@ -324,12 +345,12 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Va
         else if (gBalance == -2) {
             // parent is a left child and node is a left child
             // zig-zig case
-            if (pIsLeftChild == true) {
+            if (nIsLeftChild == true) {
                 rotateRight(grandparent);
                 parent -> setBalance(0);
                 grandparent -> setBalance(0);
             }
-            // parent is a right child and node is a left child
+            // parent is a left child and node is a right child
             // zig-zag case
             else {
                 rotateLeft(parent);
@@ -347,13 +368,13 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Va
                 }
                 else if (node -> getBalance() == 1) {
                     parent -> setBalance(-1);
-                    grandparent -> setBalance(1);
+                    grandparent -> setBalance(0);
                     node -> setBalance(0);
                 }
             }
         }
     }
-    // node is a right child
+    // parent is a right child
     else {
         gBalance = grandparent -> getBalance() + 1;
         grandparent -> setBalance(gBalance);
@@ -367,18 +388,18 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Va
         else if (gBalance == 2) {
             // parent is a right child and node is a right child
             // zig-zig case
-            if (pIsLeftChild == false) {
+            if (nIsLeftChild == false) {
                 rotateLeft(grandparent);
                 parent -> setBalance(0);
                 grandparent -> setBalance(0);
             }
-            // parent is a left child and node is a right child
+            // parent is a right child and node is a left child
             // zig-zag case
             else {
                 rotateRight(parent);
                 rotateLeft(grandparent);
 
-                if (node -> getBalance() == -1) {
+                if (node -> getBalance() == 1) {
                     parent -> setBalance(0);
                     grandparent -> setBalance(-1);
                     node -> setBalance(0);
@@ -388,9 +409,9 @@ void AVLTree<Key, Value>::insertFix(AVLNode<Key, Value>* parent, AVLNode<Key, Va
                     grandparent -> setBalance(0);
                     node -> setBalance(0);
                 }
-                else if (node -> getBalance() == 1) {
-                    parent -> setBalance(+1);
-                    grandparent -> setBalance(-1);
+                else if (node -> getBalance() == -1) {
+                    parent -> setBalance(1);
+                    grandparent -> setBalance(0);
                     node -> setBalance(0);
                 }
             }
@@ -456,23 +477,24 @@ void AVLTree<Key, Value>:: remove(const Key& key)
         else {
             this -> root_ = child;
         }
-            }
+    }
     else if ((parent -> getLeft() != NULL) && (parent -> getLeft() -> getKey() == curr -> getKey())) {
         // std::cout << "update parent's left child" << std::endl;
         diff = 1;
         parent -> setLeft(child);
-        parent -> setBalance(parent -> getBalance() + diff);
+        // parent -> setBalance(parent -> getBalance() + diff);
     }
     else if ((parent -> getRight() != NULL) && (parent -> getRight() -> getKey() == curr -> getKey())) {
         // std::cout << "update parent's right child" << std::endl;
         diff = -1;
         parent -> setRight(child);
-        parent -> setBalance(parent -> getBalance() + diff);
+        // parent -> setBalance(parent -> getBalance() + diff);
     }
 
     // delete current node after updating pointers
     delete curr;
 
+    // if (parent != NULL) std::cout << "parent balance in remove function: " << (int16_t)(parent -> getBalance()) << std::endl;
     // fix balance after removal
     removeFix(parent, diff);
 
@@ -500,7 +522,10 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
     }
 
     if (diff == -1) {
+        // std::cout << "here ////////////////////////////////////////////" << std::endl;
+        // std::cout << "node balance: " << (int16_t)(node -> getBalance()) << std::endl;
         if (node -> getBalance() + diff == -2) {
+            // std::cout << "here -2 /////////////////////////////////////////////" << std::endl;
             AVLNode<Key, Value>* child = node -> getLeft();
 
             // zig-zig case
@@ -508,6 +533,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                 rotateRight(node);
                 node -> setBalance(0);
                 child -> setBalance(0);
+                removeFix(parent, ndiff);
             }
             // zig-zig case
             else if (child -> getBalance() == 0) {
@@ -528,7 +554,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                 }
                 else if (grandchild -> getBalance() == 0) {
                     node -> setBalance(0);
-                    child -> setBalance(-1);
+                    child -> setBalance(0);
                     grandchild -> setBalance(0);
                 }
                 else if (grandchild -> getBalance() == -1) {
@@ -536,19 +562,21 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                     child -> setBalance(0);
                     grandchild -> setBalance(0);
                 }
-            }
 
-            removeFix(parent, ndiff);
+                removeFix(parent, ndiff);
+            }
         }
         else if (node -> getBalance() + diff == -1) {
+            // std::cout << "here -1 /////////////////////////////////////////////" << std::endl;
             node -> setBalance(-1);
         }
         else if (node -> getBalance() + diff == 0) {
+            // std::cout << "here 0////////////////////////////////////////////" << std::endl;
             node -> setBalance(0);
             removeFix(parent, ndiff);
         }
     }
-    else if (diff == 1) {
+    else {
         if (node -> getBalance() + diff == 2) {
             AVLNode<Key, Value>* child = node -> getRight();
 
@@ -557,6 +585,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                 rotateLeft(node);
                 node -> setBalance(0);
                 child -> setBalance(0);
+                removeFix(parent, ndiff);
             }
             // zig-zig case
             else if (child -> getBalance() == 0) {
@@ -577,7 +606,7 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                 }
                 else if (grandchild -> getBalance() == 0) {
                     node -> setBalance(0);
-                    child -> setBalance(1);
+                    child -> setBalance(0);
                     grandchild -> setBalance(0);
                 }
                 else if (grandchild -> getBalance() == 1) {
@@ -585,9 +614,9 @@ void AVLTree<Key, Value>::removeFix(AVLNode<Key, Value>* node, int diff) {
                     child -> setBalance(0);
                     grandchild -> setBalance(0);
                 }
-            }
 
-            removeFix(parent, ndiff);
+                removeFix(parent, ndiff);
+            }
         }
         else if (node -> getBalance() + diff == 1) {
             node -> setBalance(1);
