@@ -52,35 +52,20 @@ int getSubtreeHeight(Node<Key, Value> * root, int recursionDepth = 1)
     {
         return 0;
     }
-		// std::cout << "inside subtree height" << std::endl;
 
     if(recursionDepth > PPBST_MAX_HEIGHT)
     {
         // bail out to prevent infinite loops on bad trees
-				// std::cout << "inside subtree height 2" << std::endl;
-
         return 0;
     }
-		// std::cout << "root: " << root -> getKey() << std::endl;
-
-		// std::cout << "hello" << std::endl;
-
-		// root -> getRight();
-		// std::cout << "inside subtree height - right" << std::endl;
-		// root -> getLeft();
-		// std::cout << "inside subtree height - left" << std::endl;
-
 
     return std::max(getSubtreeHeight(root->getLeft(), recursionDepth + 1),
                     getSubtreeHeight(root->getRight(), recursionDepth + 1)) + 1;
 }
 
 /* Function to prettily print a BST out to the terminal.
-
    Output should look a bit like this:
-
    --------------------------------------------------
-
 					 [01]
 				    /    \
 		 [02]                    [03]
@@ -88,20 +73,16 @@ int getSubtreeHeight(Node<Key, Value> * root, int recursionDepth = 1)
    [04]        [05]        [06]        [07]
    /  \        /  \        /  \           \
 [08]  [09]  [10]  [11]  [12]  [13]  [15]  [15]
-
     1: Foo
     2: Bar
     3: Baz
     ....
     -------------------------------------------------
-
 	To keep the distance between nodes down, nodes should only
 	have a number inside them, and their actual value should be
 	printed out at the bottom.
-
 	This function should handle broken trees without crashing,
 	and should print as much of them as it can.
-
     */
 
 template<typename Key, typename Value>
@@ -120,21 +101,11 @@ void BinarySearchTree<Key, Value>::printRoot (Node<Key, Value>* root) const
 
     // save initial cout state (from https://stackoverflow.com/questions/2273330/restore-the-state-of-stdcout-after-manipulating-it)
     std::ios::fmtflags origCoutState(std::cout.flags());
-		// std::cout << "here inside print" << std::endl;
-
-		// std::cout << "root: " << root -> getKey() << std::endl;
-		// root -> getValue();
-
-		// std::cout << "root: " << root -> getKey() << std::endl;
-
 
     // do some initial calculations
     // ----------------------------------------------------------------------
     uint32_t printedTreeHeight = getSubtreeHeight(root);
     bool clippedFinalElements = false;
-		// std::cout << printedTreeHeight << std::endl;
-
-		// std::cout << "here inside print" << std::endl;
 
     // with the width of a standard terminal, we can only print 2^5 = 32 elements
     if(printedTreeHeight > PPBST_MAX_HEIGHT)
@@ -144,12 +115,8 @@ void BinarySearchTree<Key, Value>::printRoot (Node<Key, Value>* root) const
 
     }
 
-		// std::cout << "here inside print" << std::endl;
-
     uint16_t finalRowNumElements = (uint16_t)std::pow(2, printedTreeHeight - 1);
     uint16_t finalRowWidth = ((uint16_t)(ELEMENT_WIDTH * finalRowNumElements - PADDING));
-
-		// std::cout << "here inside print" << std::endl;
 
     // get placeholders
     // ----------------------------------------------------------------------
@@ -167,8 +134,6 @@ void BinarySearchTree<Key, Value>::printRoot (Node<Key, Value>* root) const
         }
 
     }
-
-		// std::cout << "here inside print" << std::endl;
 
     // print tree
     // ----------------------------------------------------------------------
@@ -302,7 +267,6 @@ void BinarySearchTree<Key, Value>::printRoot (Node<Key, Value>* root) const
             std::cout << '(' << placeholdersIter->first << ", ";
 
             typename BinarySearchTree<Key, Value>::iterator elementIter = this->find(placeholdersIter->first);
-						// std::cout << "here" << std::endl;
             if(elementIter == this->end())
             {
                 std::cout << "<error: lookup failed>";

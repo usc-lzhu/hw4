@@ -8,6 +8,15 @@ using namespace std;
 
 
 // You may add any prototypes of helper functions here
+bool equalPathsHelper(Node* node, int currHeight, int* leafHeight);
+
+bool equalPaths(Node * root)
+{
+    // Add your code below
+    int temp = -1;
+    return equalPathsHelper(root, 0, &temp);   
+}
+
 bool equalPathsHelper(Node* node, int currHeight, int* leafHeight) {
     // first base case: traversed past nodes
     if (node == nullptr) {
@@ -34,13 +43,3 @@ bool equalPathsHelper(Node* node, int currHeight, int* leafHeight) {
     // recursive case: traverse to left and/or right child node
     return equalPathsHelper(node -> left, currHeight + 1, leafHeight) && equalPathsHelper(node -> right, currHeight + 1, leafHeight);
 }
-
-
-bool equalPaths(Node * root)
-{
-    // Add your code below
-    int temp = -1;
-    return equalPathsHelper(root, 0, &temp);  
-  
-}
-

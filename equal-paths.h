@@ -29,6 +29,4 @@ struct Node {
  */
 bool equalPaths(Node * root);
 
-bool equalPathsHelper(Node* node, int currHeight, int* leafHeight);
-
 #endif
